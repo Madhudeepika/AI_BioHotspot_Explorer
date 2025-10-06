@@ -8,7 +8,7 @@ import py3Dmol
 
 # PAGE CONFIG
 st.set_page_config(
-    page_title="AI-BioHotspot Explorer | Inkrides Research",
+    page_title="AI-BioHotspot Explorer | MadhuDeepika",
     page_icon="🧬",
     layout="wide",
     initial_sidebar_state="expanded"
