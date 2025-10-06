@@ -4,5 +4,6 @@ matplotlib
 joblib
 tensorflow
 biotite
-# nglview temporarily disabled (incompatible with Streamlit Cloud)
+py3Dmol
+
 
