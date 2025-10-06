@@ -6,22 +6,27 @@ import os
 from pathlib import Path
 import py3Dmol
 
+# ------------------------------------------
 # PAGE CONFIG
+# ------------------------------------------
 st.set_page_config(
-    page_title="AI-BioHotspot Explorer | MadhuDeepika",
+    page_title="AI-BioHotspot Explorer | Madhu Deepika",
     page_icon="🧬",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# CUSTOM CSS — using your background image + binary overlay
+# ------------------------------------------
+# CUSTOM CSS — Dark DNA Background (Streamlit-safe)
+# ------------------------------------------
 st.markdown("""
     <style>
     [data-testid="stAppViewContainer"] {
         background: linear-gradient(180deg, #0a1a2a 0%, #041018 100%), 
-                    url("https://www.science.org/do/10.1126/science.za3alec/full/_20241114_on_ai_dna_genomics-1731610821520.jpg");
+                    url("https://i.ibb.co/X2cszK1/ai-dna-genomics-bg.jpg");
         background-size: cover;
         background-attachment: fixed;
+        background-repeat: no-repeat;
         color: #e6f2ff;
     }
 
@@ -70,13 +75,15 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# ------------------------------------------
 # SIDEBAR CONTROLS
+# ------------------------------------------
 with st.sidebar:
     st.title("AI-BioHotspot Explorer")
     gene = st.selectbox("Select Gene", ["TP53", "BRCA1"], index=0)
     model_choice = st.radio("Select Model", ["Logistic Regression", "Deep Learning"], index=1)
     top_n_choice = st.selectbox("Show Top Hotspots", ["Top 5", "Top 10", "Top 15", "Top 20"], index=1)
-    top_n = int(top_n_choice.split(" ")[1])  # Extract number
+    top_n = int(top_n_choice.split(" ")[1])
     show_exp = st.checkbox("Show Explainability", True)
     show_eff = st.checkbox("Show Efficiency", True)
     show_3d = st.checkbox("Show 3D Protein Structure", True)
@@ -100,7 +107,9 @@ hde = safe_load_csv("HDE_summary.csv")
 st.markdown("<div class='panel'>", unsafe_allow_html=True)
 st.title("🔬 AI-BioHotspot Explorer Dashboard")
 
+# ------------------------------------------
 # PREDICTIONS PANEL
+# ------------------------------------------
 with st.expander("▾ Predictions", expanded=True):
     st.markdown("<div class='panel'>", unsafe_allow_html=True)
     if model_choice == "Logistic Regression":
@@ -123,7 +132,9 @@ with st.expander("▾ Predictions", expanded=True):
         st.info("No data found. Upload exports folder.")
     st.markdown("</div>", unsafe_allow_html=True)
 
+# ------------------------------------------
 # EXPLAINABILITY PANEL
+# ------------------------------------------
 with st.expander("▾ Explainability"):
     st.markdown("<div class='panel'>", unsafe_allow_html=True)
     if show_exp and feat_imp is not None:
@@ -135,7 +146,9 @@ with st.expander("▾ Explainability"):
         st.info("Feature importance not available.")
     st.markdown("</div>", unsafe_allow_html=True)
 
+# ------------------------------------------
 # EFFICIENCY PANEL
+# ------------------------------------------
 with st.expander("▾ Efficiency & Sustainability"):
     st.markdown("<div class='panel'>", unsafe_allow_html=True)
     if show_eff and hde is not None:
@@ -146,7 +159,9 @@ with st.expander("▾ Efficiency & Sustainability"):
         st.dataframe(runtime_log)
     st.markdown("</div>", unsafe_allow_html=True)
 
-# 3D PROTEIN STRUCTURE PANEL
+# ------------------------------------------
+# 3D PROTEIN STRUCTURE PANEL (Streamlit-safe)
+# ------------------------------------------
 with st.expander("▾ 3D Protein Structure Viewer", expanded=False):
     st.markdown("<div class='panel'>", unsafe_allow_html=True)
     if show_3d:
@@ -154,13 +169,17 @@ with st.expander("▾ 3D Protein Structure Viewer", expanded=False):
         xyz = py3Dmol.view(query='pdb:1TUP')
         xyz.setStyle({'cartoon': {'color': 'spectrum'}})
         xyz.zoomTo()
-        xyz.show()
-        st.components.v1.html(xyz._make_html(), height=500)
+        html = xyz._make_html()
+        st.markdown("<div style='border:1px solid #1e88e5; border-radius:8px; padding:5px;'>", unsafe_allow_html=True)
+        st.components.v1.html(html, height=500)
+        st.markdown("</div>", unsafe_allow_html=True)
     else:
         st.info("Enable 3D viewer in sidebar.")
     st.markdown("</div>", unsafe_allow_html=True)
 
+# ------------------------------------------
 # COMING SOON PANEL
+# ------------------------------------------
 with st.expander("🔮 Coming Soon"):
     st.markdown("<div class='panel'>", unsafe_allow_html=True)
     st.write("""
@@ -173,7 +192,9 @@ with st.expander("🔮 Coming Soon"):
     """)
     st.markdown("</div>", unsafe_allow_html=True)
 
-# FOOTER BANNER
+# ------------------------------------------
+# FOOTER
+# ------------------------------------------
 st.markdown(
     """
     <hr style='border:1px solid #1e88e5;'>
